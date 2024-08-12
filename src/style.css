@@ -1,1 +1,69 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: darkgreen;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.controls input,
+.controls button {
+  margin: 0 10px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 10px;
+  justify-content: center;
+}
+
+.card {
+  flex-direction: row;
+  width: 100px;
+  height: 140px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  background: #fff;
+}
+
+.top-left-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 35px;
+}
+
+.bottom-right-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 35px;
+}
+
+.card-value {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 35px;
+}
+
+.top-left-icon.red i,
+.bottom-right-icon.red i {
+  color: red;
+}
+
+.top-left-icon.black i,
+.bottom-right-icon.black i {
+  color: black;
+}

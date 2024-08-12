@@ -1,29 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello Rigo with Vanilla.js</title>
+    <title>Carta Aleatoria</title>
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-      crossorigin="anonymous"
     />
-    <link rel="shortcut icon" href="./4geeks.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="container-fluid text-center">
-      <h1 class="mt-5">Hello Rigo!</h1>
-      <img src="./rigo-baby.jpg" />
-      <p class="alert alert-warning mt-4">
-        If this text is <b>not</b> centered and <b>yellow</b>, you probably have
-        an error
-      </p>
-      <div class="fixed-bottom p-4">
-        Made with ❤️ by
-        <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
+    <div class="controls">
+      <input
+        type="number"
+        id="numCards"
+        placeholder="Número de cartas"
+        min="1"
+      />
+      <button onclick="drawCards()">Sorteo</button>
+      <button onclick="sortCards()">Clasificación</button>
+    </div>
+    <div id="cardsContainer">
+      <div id="card" class="card position-relative">
+        <div id="top-left-icon" class="position-absolute top-left-icon"></div>
+        <div id="card-value" class="card-value"></div>
+        <div
+          id="bottom-right-icon"
+          class="position-absolute bottom-right-icon"
+        ></div>
       </div>
     </div>
+    <div id="changesLog"></div>
+
+    <script>
+      const values = [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "J",
+        "Q",
+        "K",
+        "A"
+      ];
+      const suits = [
+        { name: "Corazones", icon: "bi-suit-heart-fill", color: "red" },
+        { name: "Picas", icon: "bi-suit-spade-fill", color: "black" },
+        { name: "Tréboles", icon: "bi-suit-club-fill", color: "black" },
+        { name: "Diamantes", icon: "bi-suit-diamond-fill", color: "red" }
+      ];
+      const colors = ["red", "blue", "green", "yellow"];
+      let originalCards = [];
+      let sortedCards = [];
+
+      function generateRandomCard() {
+        const randomValue = values[Math.floor(Math.random() * values.length)];
+        const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+
+        // Construir el HTML de la carta
+        const cardHTML = `
+          <div class="card">
+            <div class="top-left-icon ${randomSuit.color}"><i class="bi ${randomSuit.icon}"></i></div>
+            <div class="card-value">${randomValue}</div>
+            <div class="bottom-right-icon ${randomSuit.color}"><i class="bi ${randomSuit.icon}"></i></div>
+          </div>
+        `;
+
+        // Retornar el HTML generado
+        return cardHTML;
+      }
+
+      // function generateRandomCard() {
+      //   const color = colors[Math.floor(Math.random() * colors.length)];
+      //   return `<div class="card ${color}">${Math.floor(Math.random() * 100) +
+      //     1}</div>`;
+      // }
+
+      function drawCards() {
+        const numCards = parseInt(document.getElementById("numCards").value);
+        if (isNaN(numCards) || numCards <= 0) return;
+
+        originalCards = [];
+        let cardsHtml = "";
+
+        for (let i = 0; i < numCards; i++) {
+          const card = generateRandomCard();
+          originalCards.push(card);
+          cardsHtml += card;
+        }
+
+        document.getElementById("cardsContainer").innerHTML = cardsHtml;
+        document.getElementById("changesLog").innerHTML = "";
+      }
+
+      function sortCards() {
+        sortedCards = [...originalCards];
+        bubbleSort(sortedCards);
+        document.getElementById("cardsContainer").innerHTML = sortedCards.join(
+          ""
+        );
+        logChanges();
+      }
+
+      function bubbleSort(arr) {
+        let len = arr.length;
+        for (let i = 0; i < len - 1; i++) {
+          for (let j = 0; j < len - i - 1; j++) {
+            if (getCardNumber(arr[j]) > getCardNumber(arr[j + 1])) {
+              [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+          }
+        }
+      }
+
+      function getCardNumber(cardHtml) {
+        return parseInt(cardHtml.match(/\d+/)[0]);
+      }
+
+      function logChanges() {
+        const changesLog =
+          originalCards.join("<br>") + "<br><br>" + sortedCards.join("<br>");
+        document.getElementById("changesLog").innerHTML = changesLog;
+      }
+    </script>
   </body>
 </html>
